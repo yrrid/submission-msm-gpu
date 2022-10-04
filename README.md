@@ -16,7 +16,7 @@ Install [CUDA 11.7](https://developer.nvidia.com/cuda-downloads).   Install rust
 Next clone the repository, and run the benchmark.
 ```
 git clone https://github.com/yrrid/submission-msm-gpu
-cd z-submission-msm-gpu
+cd submission-msm-gpu
 cargo bench
 ```
 
