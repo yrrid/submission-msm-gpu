@@ -6,8 +6,6 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    let curve = "FEATURE_BLS12_377";
-
     // account for cross-compilation [by examining environment variable]
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
@@ -33,17 +31,15 @@ fn main() {
                 println!("`force-adx` is ignored for non-x86_64 targets");
             }
         }
-        (false, false) => {
+        (false, false) =>
+        {
             #[cfg(target_arch = "x86_64")]
-            if target_arch.eq("x86_64") && std::is_x86_feature_detected!("adx")
-            {
+            if target_arch.eq("x86_64") && std::is_x86_feature_detected!("adx") {
                 println!("Enabling ADX because it was detected on the host");
                 cc_opt = Some("__ADX__");
             }
         }
-        (true, true) => panic!(
-            "Cannot compile with both `portable` and `force-adx` features"
-        ),
+        (true, true) => panic!("Cannot compile with both `portable` and `force-adx` features"),
     }
 
     cc.flag_if_supported("-mno-avx") // avoid costly transitions
@@ -79,7 +75,7 @@ fn main() {
         nvcc.file("yrrid-msm/MSM.cu").compile("msm");
 
         println!("cargo:rustc-cfg=feature=\"cuda\"");
-        println!("cargo:rerun-if-changed=cuda");
+        println!("cargo:rerun-if-changed=yrrid-msm");
         println!("cargo:rerun-if-env-changed=CXXFLAGS");
     } else {
         panic!("nvcc must be in the path. Consider adding /usr/local/cuda/bin.")
